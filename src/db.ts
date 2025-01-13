@@ -1,13 +1,13 @@
 import Dexie, { type EntityTable } from "dexie";
 
-interface Message {
+export interface Message {
 	id: number;
 	text: string;
 	sendAt: Date;
 	sendBy: string;
 }
 
-interface ConsoleTab {
+export interface ConsoleTab {
 	id: number;
 	name: string;
 	messages: Message[];
@@ -27,9 +27,28 @@ export const addNewTab = async (name: string) => {
 	return tab;
 };
 
+export const addMessageToTab = async (
+	tabId: number,
+	messageText: Message["text"],
+) => {
+	const tab = await db.consoleTab.get(tabId);
+	if (!tab) {
+		throw new Error(`Tab with id ${tabId} not found`);
+	}
+	const message: Message = {
+		id: tab.messages.length + 1,
+		text: messageText,
+		sendAt: new Date(),
+		sendBy: "User",
+	};
+	tab.messages.push(message);
+	await db.consoleTab.update(tabId, tab);
+	return message;
+};
 
-// Export the database
-export type { ConsoleTab };
+export const deleteTab = async (tabId: number) => {
+	await db.consoleTab.delete(tabId);
+};
 
 // const dummyTabs: ConsoleTab[] = [
 // 	{

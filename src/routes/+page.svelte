@@ -1,26 +1,25 @@
-<script>
-	import ConsoleHeader from '../components/ConsoleHeader.svelte';
+<script lang="ts">
+	import Header from '../components/console/Header.svelte';
+	import Messages from '../components/console/Messages.svelte';
+	import { activeTab } from '../stores';
+	import type { ConsoleTab } from '../db';
 
-	const items = [
-		{ name: 'item 1', qty: 1 },
-		{ name: 'item 2', qty: 2 },
-		{ name: 'item 3', qty: 3 },
-		{ name: 'item 4', qty: 4 },
-		{ name: 'item 5', qty: 5 }
-	];
+	let currentTab: ConsoleTab | null;
+
+	// Suscribirse a la store
+	$: activeTab.subscribe((tab) => {
+		currentTab = tab;
+	});
 </script>
 
 <section class="wrapper bg-stone-950 shadow-2xl">
-	<ConsoleHeader />
+	<Header />
 	<article>
-		<ul>
-			{#each items as item}
-				<li>{item.name} x {item.qty}</li>
-			{/each}
-		</ul>
-		<footer class="flex gap-1">
+		<Messages messages={currentTab?.messages ?? []} />
+
+		<footer class="grid w-full grid-cols-[auto,1fr] gap-2">
 			C:\Users\pol.gubau\dev\other\polwershell (main) >
-			<form action="">
+			<form action="" class="w-full">
 				<input type="text" />
 			</form>
 		</footer>
@@ -30,6 +29,7 @@
 <style>
 	input {
 		background-color: transparent;
+		width: 100%;
 	}
 	.wrapper {
 		overflow: hidden;
@@ -49,13 +49,5 @@
 		flex-direction: column;
 		gap: 1rem;
 		padding: 15px;
-		ul {
-			display: flex;
-			overflow-y: scroll;
-			height: fit-content;
-			justify-content: end;
-			flex-direction: column;
-			height: 100%;
-		}
 	}
 </style>
