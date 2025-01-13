@@ -42,6 +42,7 @@
 	"dependencies": {
 		"@inlang/paraglide-sveltekit": "^0.11.1",
 		"@tailwindcss/container-queries": "^0.1.1",
-		"@tailwindcss/typography": "^0.5.15"
+		"@tailwindcss/typography": "^0.5.15",
+		"dexie": "^4.0.10"
 	}
 }
